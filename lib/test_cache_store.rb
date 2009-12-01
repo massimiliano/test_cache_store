@@ -33,11 +33,18 @@ class TestCacheStore < ActiveSupport::Cache::MemoryStore
     @written.include?(name)
   end
   
+  def deleted?(name)
+    @deleted.include?(name) || @deleted_matchers.detect { |matcher| name =~ matcher }
+  end
+  
+  private
+  
   def keys
     @written
   end
   
-  def deleted?(name)
-    @deleted.include?(name) || @deleted_matchers.detect { |matcher| name =~ matcher }
+  def deletions
+    @deleted + @deleted_matchers
   end
+  
 end
