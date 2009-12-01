@@ -1,0 +1,46 @@
+= Test Cache Store Plugin
+
+This plugin adds a cache store to your tests.
+
+== 1. Installation
+
+script/plugin install
+
+== 2. Usage
+
+=== Testing page caching
+
+Create an integration test.
+
+context "as superuser" do
+  setup { do_admin_login }
+  
+  context "on GET to /my_url" do
+    setup do
+      get my_url
+    end
+    should "cache my_url fragment"do
+      assert ActionController::Base.cache_store.written? 'my_url-key'
+    end
+	context "on POST to update_url" do
+      setup do
+        post update_url
+      end
+      should "expire my_url fragments"do
+          assert ActionController::Base.cache_store.deleted? my_url-key
+        end
+      end
+    end
+  end
+end
+
+== 3. License
+
+This plugin is licensed under the MIT license. Complete license text
+is included in the MIT-LICENSE[link:files/MIT-LICENSE.html] file.
+
+== 4. Author
+
+This plugin was created by Massimiliano Pepe starting from cache_test
+plugin (https://github.com/relevance/cache_test) and is hosted on github:
+
